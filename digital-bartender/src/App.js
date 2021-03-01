@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 
 import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
+import RecipeCard from './RecipeCard';
 
 function App() {
   const [text, setText] = useState('')
@@ -42,35 +41,52 @@ function App() {
     }
   }
 
-  return (
-    <Container fluid>
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label>Search for a drink</Form.Label>
-          <Form.Control value={text} onChange={e=> setText(e.target.value)} autoFocus
-          onKeyPress={e=> e.key==='Enter' && getRecipes()} />
-        </Form.Group>
-        <Button variant="primary" disabled={!text} onClick={getRecipes}>
-          Search
-        </Button>
-        <Button variant="secondary" onClick={getRandom}>
-          <GiPerspectiveDiceSixFacesRandom />
-        </Button>
-
-      {recipes && recipes.length===0 && <div>
-        No recipes found! Try another search.
-      </div>}
-      
-      {recipes && recipes.length>0 && <body>
-        {term && <div>Showing results for: {term}</div>}
-        {recipes.map(m=> 
-          <div>
-            <h1>{m.strDrink}</h1>
-            <p>{m.strInstructions}</p>
-            <img alt='' src={m.strDrinkThumb}/>
+  return ( <div>
+    <div className="header">
+          <h3>Digital Bartender</h3>
+          <div className="searchbar">
+            <p>Search drinks:</p>
+            <input value={text} placeholder="drink name" onChange={e=> setText(e.target.value)} autoFocus
+            onKeyPress={e=> e.key==='Enter' && getRecipes()} />
+            <button className="btn-primary" disabled={!text} onClick={getRecipes}>
+              Search
+            </button>
+            <button className="btn-secondary" onClick={getRandom}>
+              <GiPerspectiveDiceSixFacesRandom /> Random
+            </button>
           </div>
-        )}
-      </body>}
-    </Container>
+      </div>
+      <Container fluid>
+
+        {recipes && recipes.length===0 && <div>
+          No recipes found! Try another search.
+        </div>}
+        
+        {recipes && recipes.length>0 && <body>
+          <Row>
+            <Col lg={{ span: 10, offset: 1 }}>
+              {term && <div>Showing results for: {term}</div>}
+            </Col>
+          </Row>
+          
+          {recipes.map(m=> 
+            <Row>
+              <RecipeCard
+                name={m.strDrink}
+                instructions={m.strInstructions}
+                img={m.strDrinkThumb}
+                measurements={[m.strMeasure1, m.strMeasure2, m.strMeasure3, m.strMeasure4, m.strMeasure5, m.strMeasure6]}
+                ingredients={[m.strIngredient1, m.strIngredient2, m.strIngredient3, m.strIngredient4, m.strIngredient5, m.strIngredient6]}
+                ingredient1={[m.strMeasure1, m.strIngredient1]}
+                ingredient2={[m.strMeasure2, m.strIngredient2]}
+              />
+            </Row>
+          )}
+        </body>}
+      </Container>
+
+    </div>
+    
   );
 }
 
