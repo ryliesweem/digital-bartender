@@ -12,25 +12,24 @@ function RecipeCard(props) {
         <li>{measurement}</li>
     );
 
-    return <Col lg={{ span: 10, offset: 1 }} className="col-bkg">
-        <Row>
-            <Col md={3}>
-                <img src={props.img} alt='' />
-            </Col>
-            <Col md={9}>
-                <h2>{props.name}</h2>
-                <div>
-                    <ul>
-                        {listMeasurements}
-                    </ul>
-                    <ul>
-                        {listIngredients}
-                    </ul>
-                </div>
-                <p>{props.instructions}</p>
-            </Col>
-        </Row>
-    </Col>
+    return <Row className="bkg1">
+                <Col md={3}>
+                    <img src={props.img} alt='' />
+                </Col>
+                <Col md={9}>
+                    <h2>{props.name}</h2>
+                    <div className="ingredients">
+                        <ul>
+                            {listMeasurements}
+                        </ul>
+                        <ul>
+                            {listIngredients}
+                        </ul>
+                    </div>
+                    <p>{props.instructions}</p>
+                </Col>
+            </Row>
+    
 }
 
 export default RecipeCard

@@ -1,19 +1,23 @@
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Container';
-
 import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
 import RecipeCard from './RecipeCard';
-
+import HomeCategories from './HomeCategories';
+import WeeklyDrink from "./WeeklyDrink";
 function App() {
   const [text, setText] = useState('')
   const[term, setTerm] = useState('')
   const [recipes, setRecipes] = useState(null)
-
   async function getRecipes(){
     setTerm('')
     setRecipes(null)
@@ -27,7 +31,6 @@ function App() {
       setText('')
     }
   }
-
   async function getRandom(){
     setTerm('')
     setRecipes(null)
@@ -40,54 +43,68 @@ function App() {
       setText('')
     }
   }
-
-  return ( <div>
+  return ( <Router>
     <div className="header">
-          <h3>Digital Bartender</h3>
+          <Link to="/"><h3>Mixer</h3></Link>
           <div className="searchbar">
             <p>Search drinks:</p>
             <input value={text} placeholder="drink name" onChange={e=> setText(e.target.value)} autoFocus
             onKeyPress={e=> e.key==='Enter' && getRecipes()} />
-            <button className="btn-primary" disabled={!text} onClick={getRecipes}>
+            <Link to="/recipes"><button className="btn-1" disabled={!text} onClick={getRecipes}>
               Search
-            </button>
-            <button className="btn-secondary" onClick={getRandom}>
+            </button></Link>
+            <Link to="/recipes"><button className="btn-2" onClick={getRandom}>
               <GiPerspectiveDiceSixFacesRandom /> Random
-            </button>
+            </button></Link>
           </div>
       </div>
-      <Container fluid>
+      <Switch>
+          <Route path="/recipes">
+            <Recipes recipes={recipes} term={term} />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      
+    </Router>
+  );
+}
+export default App;
+function Home() {
+  return <div>
+      <HomeCategories />
+      <WeeklyDrink />
+    </div>;
+}
+function Recipes(props) {
+  const {recipes} = props
+  const {term} = props
 
-        {recipes && recipes.length===0 && <div>
-          No recipes found! Try another search.
-        </div>}
-        
-        {recipes && recipes.length>0 && <body>
-          <Row>
-            <Col lg={{ span: 10, offset: 1 }}>
-              {term && <div>Showing results for: {term}</div>}
-            </Col>
-          </Row>
-          
+  return <div>
+    {recipes && recipes.length===0 && <div>
+      No recipes found! Try another search.
+    </div>}
+    {recipes && recipes.length>0 && <body className="bkg3">
+      <Row>
+        <Col lg={{ span: 10, offset: 1 }}>
+          <h1>Recipes</h1>
+          {term && <div style={{color: 'white'}}>Showing results for: <strong>{term}</strong></div>}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
           {recipes.map(m=> 
-            <Row>
               <RecipeCard
                 name={m.strDrink}
                 instructions={m.strInstructions}
                 img={m.strDrinkThumb}
                 measurements={[m.strMeasure1, m.strMeasure2, m.strMeasure3, m.strMeasure4, m.strMeasure5, m.strMeasure6]}
                 ingredients={[m.strIngredient1, m.strIngredient2, m.strIngredient3, m.strIngredient4, m.strIngredient5, m.strIngredient6]}
-                ingredient1={[m.strMeasure1, m.strIngredient1]}
-                ingredient2={[m.strMeasure2, m.strIngredient2]}
               />
-            </Row>
           )}
-        </body>}
-      </Container>
-
-    </div>
-    
-  );
+        </Col>
+      </Row>
+    </body>}
+  </div>;
 }
-
-export default App;
