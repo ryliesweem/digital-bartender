@@ -12,11 +12,11 @@ function RecipeCard(props) {
         <li>{measurement}</li>
     );
 
-    return <Row className="bkg1">
-                <Col md={3}>
+    return <Row className="recipe-card">
+                <Col lg={3} md={5}>
                     <img src={props.img} alt='' />
                 </Col>
-                <Col md={9}>
+                <Col lg={9} md={7}>
                     <h2>{props.name}</h2>
                     <div className="ingredients">
                         <ul>

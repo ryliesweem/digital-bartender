@@ -5,6 +5,8 @@ import {
   Link
 } from "react-router-dom";
 import React, {useState} from 'react';
+import {ReactComponent as ReactLogo} from './drink.svg';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Container from 'react-bootstrap/Container';
@@ -12,12 +14,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Container';
 import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
 import RecipeCard from './RecipeCard';
+import Landing from './Landing';
 import HomeCategories from './HomeCategories';
 import WeeklyDrink from "./WeeklyDrink";
+
 function App() {
   const [text, setText] = useState('')
   const[term, setTerm] = useState('')
   const [recipes, setRecipes] = useState(null)
+  
   async function getRecipes(){
     setTerm('')
     setRecipes(null)
@@ -44,20 +49,23 @@ function App() {
     }
   }
   return ( <Router>
+
     <div className="header">
           <Link to="/"><h3>Mixer</h3></Link>
           <div className="searchbar">
-            <p>Search drinks:</p>
-            <input value={text} placeholder="drink name" onChange={e=> setText(e.target.value)} autoFocus
+            <input value={text} placeholder="search drinks" onChange={e=> setText(e.target.value)} autoFocus
             onKeyPress={e=> e.key==='Enter' && getRecipes()} />
             <Link to="/recipes"><button className="btn-1" disabled={!text} onClick={getRecipes}>
               Search
             </button></Link>
+          </div>
+          <div className="random-btn">
             <Link to="/recipes"><button className="btn-2" onClick={getRandom}>
               <GiPerspectiveDiceSixFacesRandom /> Random
             </button></Link>
           </div>
       </div>
+
       <Switch>
           <Route path="/recipes">
             <Recipes recipes={recipes} term={term} />
@@ -72,27 +80,28 @@ function App() {
 }
 export default App;
 function Home() {
-  return <div>
+  return <Container fluid>
+      <Landing />
       <HomeCategories />
       <WeeklyDrink />
-    </div>;
+    </Container>;
 }
 function Recipes(props) {
   const {recipes} = props
   const {term} = props
 
   return <div>
-    {recipes && recipes.length===0 && <div>
+    {recipes && recipes.length===0 && <body>
       No recipes found! Try another search.
-    </div>}
-    {recipes && recipes.length>0 && <body className="bkg3">
+    </body>}
+    {recipes && recipes.length>0 && <body className="dark-bkg pink">
       <Row>
         <Col lg={{ span: 10, offset: 1 }}>
           <h1>Recipes</h1>
           {term && <div style={{color: 'white'}}>Showing results for: <strong>{term}</strong></div>}
         </Col>
       </Row>
-      <Row>
+      <Row className="mt-4">
         <Col>
           {recipes.map(m=> 
               <RecipeCard
