@@ -29,7 +29,7 @@ body {
   flex-wrap: wrap;
   align-content: center;
   justify-content: space-between;
-  background-color: var(--dk-blue);
+  background-color: var(--dk-green);
   padding: 0.75rem 1.5rem;
   color: white;
   max-width: 100vw;
@@ -100,22 +100,20 @@ h3 {
   border: 2px solid var(--lt-yellow);
   border-radius: 0.2rem;
   padding: 5px 20px;
-  transition-duration: 0.4s;
   margin-left: 1rem;
   outline: 0;
 }
 
 .btn-1:hover, .btn-2:hover, .btn-1:focus, .btn-2:focus  {
-  color: var(--black);
-  background-color: white;
+  border: 2px solid var(--dk-blue);
 }
 
 input {
   color: white;
-  border: 1px solid var(--lt-yellow);
-  background-color: var(--dk-blue);
+  border: 2px solid var(--lt-yellow);
+  background-color: var(--dk-green);
   border-radius: 0.2rem;
-  padding-left: 0.5rem;
+  padding-left: 2.25rem;
 }
 
 input::placeholder {
@@ -165,7 +163,7 @@ button:focus {
 }
 
 .search-card {
-  background-color: white;
+  background-color: var(--lt-yellow);
   color: var(--black);
   text-align: center;
   margin: 0.5rem;

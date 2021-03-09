@@ -5,7 +5,6 @@ import {
   Link
 } from "react-router-dom";
 import React, {useState} from 'react';
-import {ReactComponent as ReactLogo} from './drink.svg';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -13,8 +12,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Container';
 import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
+import { AiOutlineSearch } from 'react-icons/ai';
+
 import RecipeCard from './RecipeCard';
-import Landing from './Landing';
 import HomeCategories from './HomeCategories';
 import WeeklyDrink from "./WeeklyDrink";
 
@@ -48,11 +48,13 @@ function App() {
       setText('')
     }
   }
+
   return ( <Router>
 
     <div className="header">
           <Link to="/"><h3>Mixer</h3></Link>
           <div className="searchbar">
+            <AiOutlineSearch style={{marginLeft: '0.75rem', position: 'absolute', color:'#DAC62F'}} />
             <input value={text} placeholder="search drinks" onChange={e=> setText(e.target.value)} autoFocus
             onKeyPress={e=> e.key==='Enter' && getRecipes()} />
             <Link to="/recipes"><button className="btn-1" disabled={!text} onClick={getRecipes}>
@@ -79,13 +81,14 @@ function App() {
   );
 }
 export default App;
+
 function Home() {
   return <Container fluid>
-      <Landing />
       <HomeCategories />
       <WeeklyDrink />
     </Container>;
 }
+
 function Recipes(props) {
   const {recipes} = props
   const {term} = props
