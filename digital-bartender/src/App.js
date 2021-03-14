@@ -2,23 +2,33 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useHistory
 } from "react-router-dom";
 import React, {useState} from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import Container from 'react-bootstrap/Container';
+
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
 import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
 import { AiOutlineSearch } from 'react-icons/ai';
 
 import RecipeCard from './RecipeCard';
-import HomeCategories from './HomeCategories';
-import WeeklyDrink from "./WeeklyDrink";
+import HomePage from './HomePage';
+import ScrollToTop from './ScrollToTop';
+
+function Wrap() {
+  return <Router>
+    <ScrollToTop />
+    <App />
+  </Router>
+}
 
 function App() {
+  const history = useHistory()
+
   const [text, setText] = useState('')
   const[term, setTerm] = useState('')
   const [recipes, setRecipes] = useState(null)
@@ -37,26 +47,28 @@ function App() {
     }
   }
   async function getRandom(){
-    setTerm('')
     setRecipes(null)
     let url = 'https://www.thecocktaildb.com/api/json/v1/1/random.php'
     const r = await fetch(url)
     const j = await r.json()
     if(j.drinks) {
       setRecipes(j.drinks)
-      setTerm(text)
-      setText('')
     }
   }
 
-  return ( <Router>
+  return ( <>
 
     <div className="header">
           <Link to="/"><h3>Mixer</h3></Link>
           <div className="searchbar">
             <AiOutlineSearch style={{marginLeft: '0.75rem', position: 'absolute', color:'#DAC62F'}} />
             <input value={text} placeholder="search drinks" onChange={e=> setText(e.target.value)} autoFocus
-            onKeyPress={e=> e.key==='Enter' && getRecipes()} />
+            onKeyPress={e=> {
+              if (e.key==='Enter') {
+                getRecipes()
+                history.push('/recipes')
+              } 
+            }} />
             <Link to="/recipes"><button className="btn-1" disabled={!text} onClick={getRecipes}>
               Search
             </button></Link>
@@ -69,24 +81,21 @@ function App() {
       </div>
 
       <Switch>
-          <Route path="/recipes">
-            <Recipes recipes={recipes} term={term} />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+        <Route path="/recipes">
+          <Recipes recipes={recipes} term={term} />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
       
-    </Router>
+    </>
   );
 }
-export default App;
+export default Wrap;
 
 function Home() {
-  return <Container fluid>
-      <HomeCategories />
-      <WeeklyDrink />
-    </Container>;
+  return <HomePage />;
 }
 
 function Recipes(props) {
@@ -94,12 +103,12 @@ function Recipes(props) {
   const {term} = props
 
   return <div>
-    {recipes && recipes.length===0 && <body>
+    {recipes && recipes.length===0 && <div className="dark-bkg pink">
       No recipes found! Try another search.
-    </body>}
-    {recipes && recipes.length>0 && <body className="dark-bkg pink">
+    </div>}
+    {recipes && recipes.length>0 && <div className="dark-bkg pink">
       <Row>
-        <Col lg={{ span: 10, offset: 1 }}>
+        <Col>
           <h1>Recipes</h1>
           {term && <div style={{color: 'white'}}>Showing results for: <strong>{term}</strong></div>}
         </Col>
@@ -117,6 +126,6 @@ function Recipes(props) {
           )}
         </Col>
       </Row>
-    </body>}
+    </div>}
   </div>;
 }

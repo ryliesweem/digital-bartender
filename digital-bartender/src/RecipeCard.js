@@ -3,13 +3,13 @@ import Row from 'react-bootstrap/Row';
 
 function RecipeCard(props) {
     const ingredients = props.ingredients;
-    const listIngredients = ingredients.map((ingredient) =>
-        <li className="strong">{ingredient}</li>
+    const listIngredients = ingredients.map((ingredient, i) =>
+        <li key={i} className="strong">{ingredient}</li>
     );
 
     const measurements = props.measurements;
-    const listMeasurements = measurements.map((measurement) =>
-        <li>{measurement}</li>
+    const listMeasurements = measurements.map((measurement, i) =>
+        <li key={i}>{measurement}</li>
     );
 
     return <Row className="recipe-card">
